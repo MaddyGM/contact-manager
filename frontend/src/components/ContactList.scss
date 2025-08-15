@@ -1,0 +1,30 @@
+.editButton,
+.deleteButton {
+  background-color: #99be96;
+  border: #99be96;
+  color: white;
+  transition: background-color 0.2s, opacity 0.2s;
+}
+
+.editButton:hover,
+.deleteButton:hover {
+  background-color: #99be96;
+  opacity: 0.55;
+  color: white;
+}
+
+.editButton:active,
+.deleteButton:active {
+  background-color: #99be96;
+  opacity: 0.55;
+  color: white;
+}
+
+.colorTable {
+  border-radius: 16px;
+  margin: 0 auto;
+  width: 130%;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
