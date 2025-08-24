@@ -81,7 +81,7 @@ function ContactList() {
                                     <td>{contact.firstName}</td>
                                     <td>{contact.lastName}</td>
                                     <td>{contact.email}</td>
-                                    <td> </td>
+                                    <td>{contact.position ? contact.position.name : ''}</td>
                                     <td>
                                         <Link className="btn editButton me-2" to={`/edit/${contact.id}`}>Edit</Link>
                                         <Link className="btn editButton me-2" to={`/detail/${contact.id}`}>Details</Link>

@@ -1,55 +1,63 @@
 import React, { useState, useEffect } from 'react';
-import { createContact, getContact, updateContact } from '../api/Contacts';
+import { createContact, getContact, updateContact, getPositions } from '../api/Contacts';
 import { useNavigate, useParams } from 'react-router-dom';
 import './ContactList.scss';
 
 function ContactForm() {
-    const [contact, setContact] = useState({ firstName: '', lastName: '', email: '' });
+    const [contact, setContact] = useState({ firstName: '', lastName: '', email: '', positionId: '' });
+    const [positions, setPositions] = useState([]); // Lista de posiciones disponibles
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const { id } = useParams();
 
+    // Cargar posiciones disponibles y datos de contacto si es edición
     useEffect(() => {
-        if (id) {
-            const loadContact = async () => {
+        const loadPositions = async () => {
+            try {
+                const response = await getPositions();
+                setPositions(response.data);
+            } catch (err) {
+                console.error("Error loading positions:", err);
+                setError('Error loading positions from server.');
+            }
+        };
+
+        const loadContact = async () => {
+            if (id) {
                 setLoading(true);
-                setError(null);
                 try {
-                    console.log(`Loading contact with ID: ${id}...`);
                     const result = await getContact(id);
                     setContact(result.data);
-                    console.log("Contact loaded successfully:", result.data);
                 } catch (err) {
                     console.error(`Error loading contact with ID ${id}:`, err);
-                    if (err.response && err.response.data && err.response.data.message) {
-                        setError(err.response.data.message);
-                    } else {
-                        setError("Unexpected error occurred while loading contact.");
-                    }
+                    setError('Error loading contact details.');
                 } finally {
                     setLoading(false);
                 }
-            };
-            loadContact();
-        }
+            }
+        };
+
+        loadPositions();
+        loadContact();
     }, [id]);
 
-    const handleChange = e => {
-        setContact({ ...contact, [e.target.name]: e.target.value });
+    // Manejo de cambios en inputs
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setContact({ ...contact, [name]: value });
         setError('');
     };
 
-    const handleSubmit = async e => {
+    // Guardar contacto (crear o actualizar)
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setError(null);
+        setError('');
         try {
             if (id) {
-                console.log(`Updating contact ID: ${id}...`);
                 await updateContact(id, contact);
             } else {
-                console.log("Creating new contact...");
                 await createContact(contact);
             }
             navigate('/');
@@ -57,9 +65,9 @@ function ContactForm() {
             console.error("Error submitting contact:", err);
             if (err.response && err.response.data) {
                 const messages = Object.values(err.response.data).join(', ');
-                setError(messages || 'Error sending data');
+                setError(messages || 'Error saving data');
             } else {
-                setError('Unexpected error occurred while sending contact data.');
+                setError('Unexpected error occurred while saving contact.');
             }
         } finally {
             setLoading(false);
@@ -84,6 +92,7 @@ function ContactForm() {
                         required
                     />
                 </div>
+
                 <div className="mb-3">
                     <label className="form-label">Last Name</label>
                     <input
@@ -94,6 +103,7 @@ function ContactForm() {
                         required
                     />
                 </div>
+
                 <div className="mb-3">
                     <label className="form-label">Email</label>
                     <input
@@ -105,6 +115,25 @@ function ContactForm() {
                         required
                     />
                 </div>
+
+                <div className="mb-3">
+                    <label className="form-label">Position</label>
+                    <select
+                        className="form-control"
+                        name="positionId"
+                        value={contact.positionId}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="">-- Select a position --</option>
+                        {positions.map((pos) => (
+                            <option key={pos.id} value={pos.id}>
+                                {pos.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
                 <button type="submit" className="btn btn-success" disabled={loading}>
                     {id ? 'Update' : 'Create'}
                 </button>

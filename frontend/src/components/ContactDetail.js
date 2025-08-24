@@ -47,6 +47,7 @@ function ContactDetail() {
                     <p><strong>Name:</strong> {contact.firstName}</p>
                     <p><strong>Lastname:</strong> {contact.lastName}</p>
                     <p><strong>Email:</strong> {contact.email}</p>
+                    <p><strong>Position:</strong> {contact.position ? contact.position.name : ''}</p>
                 </div>
             </div>
             <Link className="btn btn-secondary mt-3" to="/">Back to contacts page</Link>
