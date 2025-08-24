@@ -6,16 +6,23 @@ import './ContactList.scss';
 function ContactList() {
     const [contacts, setContacts] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
     const loadContacts = useCallback(async () => {
         setLoading(true);
+        setError(null);
         try {
             console.log("Loading contacts from API...");
             const result = await getContacts();
             setContacts(result.data);
             console.log(`Contacts loaded successfully: ${result.data.length} entries.`);
-        } catch (error) {
-            console.error("Error loading contacts:", error);
+        } catch (err) {
+            console.error("Error loading contacts:", err);
+            if (err.response && err.response.data && err.response.data.message) {
+                setError(err.response.data.message);
+            } else {
+                setError("Unexpected error occurred while loading contacts.");
+            }
         } finally {
             setLoading(false);
         }
@@ -34,8 +41,13 @@ function ContactList() {
             await deleteContact(id);
             console.log(`Contact with ID ${id} deleted successfully.`);
             await loadContacts();
-        } catch (error) {
-            console.error(`Error deleting contact with ID ${id}:`, error);
+        } catch (err) {
+            console.error(`Error deleting contact with ID ${id}:`, err);
+            if (err.response && err.response.data && err.response.data.message) {
+                setError(err.response.data.message);
+            } else {
+                setError(`Unexpected error occurred while deleting contact with ID ${id}.`);
+            }
         }
     };
 
@@ -47,9 +59,11 @@ function ContactList() {
                     <Link className="btn editButton mb-3" to="/add">Add Contact</Link>
                 </div>
 
-                {loading ? (
-                    <div>Loading contacts...</div>
-                ) : (
+                {loading && <div>Loading contacts...</div>}
+
+                {error && <div className="text-danger mb-3">{error}</div>}
+
+                {!loading && !error && (
                     <div className="colorTable table-responsive">
                         <table className="table table-striped">
                             <thead>
