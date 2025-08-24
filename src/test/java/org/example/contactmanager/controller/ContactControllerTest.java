@@ -1,6 +1,7 @@
 package org.example.contactmanager.controller;
 
 import org.example.contactmanager.model.Contact;
+import org.example.contactmanager.model.Position;
 import org.example.contactmanager.service.ContactService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 
 class ContactControllerTest {
@@ -32,13 +34,23 @@ class ContactControllerTest {
 
     @Test
     void testGetContactById() {
-        Contact contact = new Contact(1L, "John", "Doe", "john@example.com");
+        Position position = new Position();
+        position.setId(1L);
+        position.setName("Developer");
+
+        Contact contact = new Contact("John", "Doe", "john@example.com");
+        contact.setId(1L);
+        contact.setPosition(position);
+
         when(contactService.getContactById(1L)).thenReturn(Optional.of(contact));
 
         ResponseEntity<Contact> response = contactController.getContactById(1L);
+
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assertions.assertNotNull(response.getBody());
+        assertNotNull(response.getBody());
         assertEquals("John", response.getBody().getFirstName());
+        assertNotNull(response.getBody().getPosition());
+        assertEquals("Developer", response.getBody().getPosition().getName());
     }
 
     @Test
