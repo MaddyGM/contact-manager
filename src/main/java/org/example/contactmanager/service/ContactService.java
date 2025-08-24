@@ -3,31 +3,52 @@ package org.example.contactmanager.service;
 import org.example.contactmanager.model.Contact;
 import org.example.contactmanager.repository.ContactRepository;
 import org.springframework.stereotype.Service;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ContactService {
     private final ContactRepository repository;
+    private final Logger logger = LoggerFactory.getLogger(ContactService.class);
 
     public ContactService(ContactRepository repository) {
         this.repository = repository;
     }
 
     public List<Contact> getAllContacts(){
-        return repository.findAll();
+        List<Contact> contacts = repository.findAll();
+        logger.info("Fetched {} contacts", contacts.size());
+        return contacts;
     }
 
     public Optional<Contact> getContactById(Long id){
-        return repository.findById(id);
+        Optional<Contact> contactOpt = repository.findById(id);
+        if (contactOpt.isPresent()) {
+            Contact contact = contactOpt.get();
+            logger.info("Contact found: id={}, firstName={}, lastName={}, email={}",
+                    contact.getId(), contact.getFirstName(), contact.getLastName(), contact.getEmail());
+        } else {
+            logger.warn("Contact with ID {} not found", id);
+        }
+        return contactOpt;
     }
 
     public Contact saveContact(Contact contact){
-        return repository.save(contact);
+        Contact savedContact = repository.save(contact);
+        logger.info("Contact saved: id={}, firstName={}, lastName={}, email={}",
+                savedContact.getId(), savedContact.getFirstName(), savedContact.getLastName(), savedContact.getEmail());
+        return savedContact;
     }
 
     public void deleteContact(Long id){
-        repository.deleteById(id);
+        Optional<Contact> contactOpt = repository.findById(id);
+        if (contactOpt.isPresent()) {
+            repository.deleteById(id);
+            logger.info("Contact deleted: id={}, email={}", id, contactOpt.get().getEmail());
+        } else {
+            logger.warn("Contact with ID {} not found for deletion", id);
+        }
     }
 }
