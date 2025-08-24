@@ -37,7 +37,7 @@ function ContactForm() {
 
     const handleChange = e => {
         setContact({ ...contact, [e.target.name]: e.target.value });
-        setError(''); // Clear error on input change
+        setError('');
     };
 
     const handleSubmit = async e => {
