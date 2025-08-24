@@ -1,8 +1,8 @@
 .editButton,
 .deleteButton {
-  background-color: #99be96;
-  border: #99be96;
-  color: white;
+  background-color: #99be96 !important;
+  border: #99be96 !important;
+  color: white !important;
   transition: background-color 0.2s, opacity 0.2s;
 }
 
@@ -22,8 +22,20 @@
 
 .colorTable {
   border-radius: 16px;
+  align-content: center;
   margin: 0 auto;
-  width: 130%;
+  width: 100%;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+.colorTableCreateContact {
+  background-color: rgba(214, 236, 211, 0.79);
+  border-radius: 16px;
+  align-content: center;
+  margin: 0 auto;
+  width: 100%;
   padding: 20px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   overflow: hidden;
