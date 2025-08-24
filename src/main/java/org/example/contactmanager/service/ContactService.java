@@ -28,6 +28,7 @@ public class ContactService {
     }
 
     public Optional<Contact> getContactById(Long id){
+        logger.info("Fetching contact with ID {}", id);
         Optional<Contact> contactOpt = repository.findById(id);
         if (contactOpt.isPresent()) {
             Contact contact = contactOpt.get();
@@ -47,17 +48,20 @@ public class ContactService {
     }
 
     public Position getPositionById(Long id) {
+        logger.info("Fetching position with ID {}", id);
         return positionRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Position not found"));
     }
 
     public void deleteContact(Long id){
+        logger.info("Attempting to delete contact with ID {}", id);
         Optional<Contact> contactOpt = repository.findById(id);
         if (contactOpt.isPresent()) {
             repository.deleteById(id);
             logger.info("Contact deleted: id={}, email={}", id, contactOpt.get().getEmail());
         } else {
             logger.warn("Contact with ID {} not found for deletion", id);
+            throw new RuntimeException("Contact not found for deletion");
         }
     }
 }

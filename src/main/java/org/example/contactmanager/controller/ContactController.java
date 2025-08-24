@@ -1,7 +1,6 @@
 package org.example.contactmanager.controller;
 
 import jakarta.validation.Valid;
-import org.apache.coyote.Response;
 import org.example.contactmanager.dto.ContactDTO;
 import org.example.contactmanager.model.Contact;
 import org.example.contactmanager.service.ContactService;
@@ -28,9 +27,8 @@ public class ContactController {
      */
     @GetMapping
     public List<Contact> getAllContacts(){
-        List<Contact> contacts = service.getAllContacts();
-        logger.info("GET /api/contacts - Returned {} contacts", contacts.size());
-        return contacts;
+        logger.info("Request: GET /api/contacts");
+        return service.getAllContacts();
     }
 
     /**
@@ -39,17 +37,10 @@ public class ContactController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<Contact> getContactById(@PathVariable Long id){
-        logger.info("GET /api/contacts/{} - Request for contact ID {}", id, id);
+        logger.info("Request: GET /api/contacts/{}", id);
         return service.getContactById(id)
-                .map(contact -> {
-                    logger.info("Contact found: id={}, firstName={}, lastName={}, email={}",
-                            contact.getId(), contact.getFirstName(), contact.getLastName(), contact.getEmail());
-                    return ResponseEntity.ok(contact);
-                })
-                .orElseGet(() -> {
-                    logger.warn("Contact with ID {} not found", id);
-                    return ResponseEntity.notFound().build();
-                });
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     /**
@@ -58,20 +49,13 @@ public class ContactController {
      */
     @PostMapping
     public Contact createContact(@Valid @RequestBody ContactDTO contactDTO) {
-        logger.info("POST /api/contacts - Creating contact: firstName={}, lastName={}, email={}, positionId={}",
-                contactDTO.getFirstName(), contactDTO.getLastName(), contactDTO.getEmail(), contactDTO.getPositionId());
-
+        logger.info("Request: POST /api/contacts");
         Contact contact = new Contact();
         contact.setFirstName(contactDTO.getFirstName());
         contact.setLastName(contactDTO.getLastName());
         contact.setEmail(contactDTO.getEmail());
-
-        // Asignar la posición usando el ID
         contact.setPosition(service.getPositionById(contactDTO.getPositionId()));
-
-        Contact savedContact = service.saveContact(contact);
-        logger.info("Contact created with ID {}", savedContact.getId());
-        return savedContact;
+        return service.saveContact(contact);
     }
 
     /**
@@ -82,28 +66,17 @@ public class ContactController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Contact> updateContact(@PathVariable Long id, @Valid @RequestBody ContactDTO contactDTO) {
-        logger.info("PUT /api/contacts/{} - Updating contact: firstName={}, lastName={}, email={}, positionId={}",
-                id, contactDTO.getFirstName(), contactDTO.getLastName(), contactDTO.getEmail(), contactDTO.getPositionId());
-
+        logger.info("Request: PUT /api/contacts/{}", id);
         return service.getContactById(id)
                 .map(existingContact -> {
                     existingContact.setFirstName(contactDTO.getFirstName());
                     existingContact.setLastName(contactDTO.getLastName());
                     existingContact.setEmail(contactDTO.getEmail());
-
-                    // Actualizar la posición
                     existingContact.setPosition(service.getPositionById(contactDTO.getPositionId()));
-
-                    service.saveContact(existingContact);
-                    logger.info("Contact with ID {} updated", id);
-                    return ResponseEntity.ok(existingContact);
+                    return ResponseEntity.ok(service.saveContact(existingContact));
                 })
-                .orElseGet(() -> {
-                    logger.warn("Contact with ID {} not found for update", id);
-                    return ResponseEntity.notFound().build();
-                });
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
 
     /**
      * Delete contact by ID.
@@ -111,17 +84,12 @@ public class ContactController {
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteContact(@PathVariable Long id){
-        logger.info("DELETE /api/contacts/{} - Delete request for contact ID {}", id, id);
+        logger.info("Request: DELETE /api/contacts/{}", id);
         return service.getContactById(id)
                 .map(contact -> {
                     service.deleteContact(id);
-                    logger.info("Contact with ID {} deleted", id);
                     return ResponseEntity.noContent().<Void>build();
                 })
-                .orElseGet(() -> {
-                    logger.warn("Contact with ID {} not found for deletion", id);
-                    return ResponseEntity.notFound().build();
-                });
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
 }
