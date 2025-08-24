@@ -2,6 +2,7 @@ package org.example.contactmanager.model;
 
 import jakarta.persistence.*;
 
+
 @Entity
 @Table(name = "contact", schema = "public")
 public class Contact {
@@ -15,8 +16,11 @@ public class Contact {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "email")
     private String email;
+
+    @ManyToOne
+    @JoinColumn(name = "position_id")
+    private Position position;
 
     public Contact(){}
 
@@ -33,16 +37,12 @@ public class Contact {
         this.id = id;
     }
 
-    //-----------------------------------------------------
-
     public String getFirstName() {
         return firstName;
     }
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
-
-    //-----------------------------------------------------
 
     public String getLastName() {
         return lastName;
@@ -51,12 +51,13 @@ public class Contact {
         this.lastName = lastName;
     }
 
-    //-----------------------------------------------------
-
     public String getEmail() {
         return email;
     }
     public void setEmail(String email) {
         this.email = email;
     }
+
+    public Position getPosition() { return position; }
+    public void setPosition(Position position) { this.position = position; }
 }

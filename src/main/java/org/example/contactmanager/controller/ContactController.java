@@ -58,12 +58,17 @@ public class ContactController {
      */
     @PostMapping
     public Contact createContact(@Valid @RequestBody ContactDTO contactDTO) {
-        logger.info("POST /api/contacts - Creating contact: firstName={}, lastName={}, email={}",
-                contactDTO.getFirstName(), contactDTO.getLastName(), contactDTO.getEmail());
+        logger.info("POST /api/contacts - Creating contact: firstName={}, lastName={}, email={}, positionId={}",
+                contactDTO.getFirstName(), contactDTO.getLastName(), contactDTO.getEmail(), contactDTO.getPositionId());
+
         Contact contact = new Contact();
         contact.setFirstName(contactDTO.getFirstName());
         contact.setLastName(contactDTO.getLastName());
         contact.setEmail(contactDTO.getEmail());
+
+        // Asignar la posición usando el ID
+        contact.setPosition(service.getPositionById(contactDTO.getPositionId()));
+
         Contact savedContact = service.saveContact(contact);
         logger.info("Contact created with ID {}", savedContact.getId());
         return savedContact;
@@ -77,13 +82,18 @@ public class ContactController {
      */
     @PutMapping("/{id}")
     public ResponseEntity<Contact> updateContact(@PathVariable Long id, @Valid @RequestBody ContactDTO contactDTO) {
-        logger.info("PUT /api/contacts/{} - Updating contact: firstName={}, lastName={}, email={}",
-                id, contactDTO.getFirstName(), contactDTO.getLastName(), contactDTO.getEmail());
+        logger.info("PUT /api/contacts/{} - Updating contact: firstName={}, lastName={}, email={}, positionId={}",
+                id, contactDTO.getFirstName(), contactDTO.getLastName(), contactDTO.getEmail(), contactDTO.getPositionId());
+
         return service.getContactById(id)
                 .map(existingContact -> {
                     existingContact.setFirstName(contactDTO.getFirstName());
                     existingContact.setLastName(contactDTO.getLastName());
                     existingContact.setEmail(contactDTO.getEmail());
+
+                    // Actualizar la posición
+                    existingContact.setPosition(service.getPositionById(contactDTO.getPositionId()));
+
                     service.saveContact(existingContact);
                     logger.info("Contact with ID {} updated", id);
                     return ResponseEntity.ok(existingContact);
@@ -93,6 +103,7 @@ public class ContactController {
                     return ResponseEntity.notFound().build();
                 });
     }
+
 
     /**
      * Delete contact by ID.

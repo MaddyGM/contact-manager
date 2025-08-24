@@ -1,7 +1,9 @@
 package org.example.contactmanager.service;
 
 import org.example.contactmanager.model.Contact;
+import org.example.contactmanager.model.Position;
 import org.example.contactmanager.repository.ContactRepository;
+import org.example.contactmanager.repository.PositionRepository;
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,10 +13,12 @@ import java.util.Optional;
 @Service
 public class ContactService {
     private final ContactRepository repository;
+    private final PositionRepository positionRepository;
     private final Logger logger = LoggerFactory.getLogger(ContactService.class);
 
-    public ContactService(ContactRepository repository) {
+    public ContactService(ContactRepository repository, PositionRepository positionRepository) {
         this.repository = repository;
+        this.positionRepository = positionRepository;
     }
 
     public List<Contact> getAllContacts(){
@@ -40,6 +44,11 @@ public class ContactService {
         logger.info("Contact saved: id={}, firstName={}, lastName={}, email={}",
                 savedContact.getId(), savedContact.getFirstName(), savedContact.getLastName(), savedContact.getEmail());
         return savedContact;
+    }
+
+    public Position getPositionById(Long id) {
+        return positionRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Position not found"));
     }
 
     public void deleteContact(Long id){
