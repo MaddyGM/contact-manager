@@ -1,9 +1,8 @@
 import axios from 'axios';
 const BASE_URL = process.env.REACT_APP_API_URL.replace(/\/$/, '');
 
-const API_URL = `${BASE_URL}/contacts`;
-const POSITIONS_API_URL = `${BASE_URL}/positions`;
-
+const API_URL = `${BASE_URL}/api/contacts`;
+const POSITIONS_API_URL = `${BASE_URL}/api/positions`;
 
 export const getContacts = () => axios.get(API_URL);
 export const getContact = (id) => axios.get(`${API_URL}/${id}`);
