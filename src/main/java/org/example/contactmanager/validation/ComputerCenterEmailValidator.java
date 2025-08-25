@@ -5,7 +5,7 @@ import jakarta.validation.ConstraintValidatorContext;
 
 public class ComputerCenterEmailValidator implements ConstraintValidator<ValidComputerCenterEmail, String> {
 
-    private static final String EMAIL_REGEX = "^[^\\s@]+@computercenter\\.com$";
+    private static final String EMAIL_REGEX = "^[^\\s@]+@computacenter\\.com$";
 
     @Override
     public boolean isValid(String email, ConstraintValidatorContext context) {
