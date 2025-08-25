@@ -4,7 +4,6 @@ import org.example.contactmanager.model.Position;
 import org.example.contactmanager.repository.PositionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,47 +21,25 @@ public class PositionService {
 
     public List<Position> findAll() {
         logger.info("Fetching all positions...");
-        try {
-            return repository.findAll();
-        } catch (DataAccessException ex) {
-            logger.error("Error fetching positions from database", ex);
-            throw new RuntimeException("Unable to fetch positions. Please try again later.");
-        }
+        return repository.findAll();
     }
 
     public Optional<Position> findById(Long id) {
         logger.info("Fetching position with ID {}", id);
-        try {
-            return repository.findById(id);
-        } catch (DataAccessException ex) {
-            logger.error("Error fetching position with ID {}", id, ex);
-            throw new RuntimeException("Unable to fetch position with ID " + id);
-        }
+        return repository.findById(id);
     }
 
     public Position save(Position position) {
         logger.info("Saving position: {}", position.getName());
-        try {
-            return repository.save(position);
-        } catch (DataAccessException ex) {
-            logger.error("Error saving position: {}", position.getName(), ex);
-            throw new RuntimeException("Unable to save position. Please check your data.");
-        }
+        return repository.save(position);
     }
 
     public void deleteById(Long id) {
         logger.info("Deleting position with ID {}", id);
-        try {
-            if (repository.existsById(id)) {
-                repository.deleteById(id);
-                logger.info("Position with ID {} deleted successfully", id);
-            } else {
-                logger.warn("Attempted to delete non-existing position with ID {}", id);
-                throw new RuntimeException("Position with ID " + id + " does not exist.");
-            }
-        } catch (DataAccessException ex) {
-            logger.error("Error deleting position with ID {}", id, ex);
-            throw new RuntimeException("Unable to delete position with ID " + id);
+        if (!repository.existsById(id)) {
+            throw new RuntimeException("Position with ID " + id + " does not exist.");
         }
+        repository.deleteById(id);
+        logger.info("Position with ID {} deleted successfully", id);
     }
 }

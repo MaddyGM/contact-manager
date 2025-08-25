@@ -32,10 +32,7 @@ public class PositionController {
         logger.info("GET /api/positions/{} - Fetching position", id);
         return service.findById(id)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> {
-                    logger.warn("Position with ID {} not found", id);
-                    return ResponseEntity.notFound().build();
-                });
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
@@ -55,21 +52,13 @@ public class PositionController {
                     logger.info("Position with ID {} updated successfully", id);
                     return ResponseEntity.ok(updated);
                 })
-                .orElseGet(() -> {
-                    logger.warn("Position with ID {} not found for update", id);
-                    return ResponseEntity.notFound().build();
-                });
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePosition(@PathVariable Long id) {
         logger.info("DELETE /api/positions/{} - Deleting position", id);
-        try {
-            service.deleteById(id);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException ex) {
-            logger.error("Failed to delete position with ID {}", id, ex);
-            return ResponseEntity.notFound().build();
-        }
+        service.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

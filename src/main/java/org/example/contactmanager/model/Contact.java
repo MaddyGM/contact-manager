@@ -17,7 +17,7 @@ public class Contact {
     private String lastName;
 
     private String email;
-
+//TODO: check if this is correct
     @ManyToOne
     @JoinColumn(name = "position_id")
     private Position position;
