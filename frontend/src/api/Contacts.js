@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8080/api/contacts';
-const POSITIONS_API_URL = 'http://localhost:8080/api/positions';
+const API_URL = `${process.env.REACT_APP_API_URL}/contacts`;
+const POSITIONS_API_URL = `${process.env.REACT_APP_API_URL}/positions`;
 
 export const getContacts = () => axios.get(API_URL);
 export const getContact = (id) => axios.get(`${API_URL}/${id}`);
