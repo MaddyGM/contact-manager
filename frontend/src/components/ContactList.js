@@ -52,11 +52,15 @@ function ContactList() {
     };
 
     return (
-        <div className="container mt-4 d-flex flex-column align-items-center min-vh-100 ">
+        <div className="container mt-4 d-flex flex-column align-items-center min-vh-100">
             <div className="w-100">
-                <div className="d-flex flex-row gap-5 justify-content-between align-items-center mt-5 mb-3">
-                    <h2>Contacts</h2>
-                    <Link className="btn editButton mb-3" to="/add">Add Contact</Link>
+                <div className="row mt-5 mb-3">
+                    <div className="col-12 col-md-6 d-flex align-items-center">
+                        <h2 className="mb-0">Contacts</h2>
+                    </div>
+                    <div className="col-12 col-md-6 d-flex justify-content-md-end justify-content-start mt-2 mt-md-0">
+                        <Link className="btn editButton btn-sm mb-3" to="/add">Add Contact</Link>
+                    </div>
                 </div>
 
                 {loading && <div>Loading contacts...</div>}
@@ -64,7 +68,7 @@ function ContactList() {
                 {error && <div className="text-danger mb-3">{error}</div>}
 
                 {!loading && !error && (
-                    <div className="colorTable table-responsive">
+                    <div className="table-responsive">
                         <table className="table table-striped">
                             <thead>
                             <tr>
@@ -72,7 +76,7 @@ function ContactList() {
                                 <th>Last Name</th>
                                 <th>Email</th>
                                 <th>Position</th>
-                                <th> </th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -83,9 +87,11 @@ function ContactList() {
                                     <td>{contact.email}</td>
                                     <td>{contact.position ? contact.position.name : ''}</td>
                                     <td>
-                                        <Link className="btn editButton me-2" to={`/edit/${contact.id}`}>Edit</Link>
-                                        <Link className="btn editButton me-2" to={`/detail/${contact.id}`}>Details</Link>
-                                        <button className="btn deleteButton" onClick={() => handleDelete(contact.id)}>Delete</button>
+                                        <div className="d-flex flex-wrap gap-1">
+                                            <Link className="btn editButton btn-sm me-1 mb-1" to={`/edit/${contact.id}`}>Edit</Link>
+                                            <Link className="btn editButton btn-sm me-1 mb-1" to={`/detail/${contact.id}`}>Details</Link>
+                                            <button className="btn deleteButton btn-sm mb-1" onClick={() => handleDelete(contact.id)}>Delete</button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
