@@ -58,19 +58,18 @@ function ContactList() {
                 </div>
 
                 {loading && <div>Loading contacts...</div>}
-
                 {error && <div className="text-danger mb-3">{error}</div>}
 
                 {!loading && !error && (
                     <div className="table-responsive">
-                        <table className="table table-striped">
-                            <thead>
+                        <table className="table table-striped table-hover">
+                            <thead className="table-light">
                             <tr>
                                 <th>Name</th>
                                 <th>Last Name</th>
                                 <th>Email</th>
                                 <th>Position</th>
-                                <th></th>
+                                <th className="text-center">Actions</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -81,9 +80,9 @@ function ContactList() {
                                     <td>{contact.email}</td>
                                     <td>{contact.position ? contact.position.name : ''}</td>
                                     <td>
-                                        <div className="d-flex flex-wrap gap-1">
-                                            <Link className="btn editButton btn-sm me-1 mb-1" to={`/edit/${contact.id}`}>Edit</Link>
-                                            <Link className="btn editButton btn-sm me-1 mb-1" to={`/detail/${contact.id}`}>Details</Link>
+                                        <div className="d-flex flex-wrap justify-content-center gap-1">
+                                            <Link className="btn editButton btn-sm mb-1" to={`/edit/${contact.id}`}>Edit</Link>
+                                            <Link className="btn editButton btn-sm mb-1" to={`/detail/${contact.id}`}>Details</Link>
                                             <button className="btn deleteButton btn-sm mb-1" onClick={() => handleDelete(contact.id)}>Delete</button>
                                         </div>
                                     </td>
@@ -95,6 +94,7 @@ function ContactList() {
                 )}
             </div>
         </div>
+
     );
 }
 
