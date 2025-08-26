@@ -5,13 +5,12 @@ import './ContactList.scss';
 
 function ContactForm() {
     const [contact, setContact] = useState({ firstName: '', lastName: '', email: '', positionId: '' });
-    const [positions, setPositions] = useState([]); // Lista de posiciones disponibles
+    const [positions, setPositions] = useState([]);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const { id } = useParams();
 
-    // Cargar posiciones disponibles y datos de contacto si es edición
     useEffect(() => {
         const loadPositions = async () => {
             try {
@@ -42,14 +41,12 @@ function ContactForm() {
         loadContact();
     }, [id]);
 
-    // Manejo de cambios en inputs
     const handleChange = (e) => {
         const { name, value } = e.target;
         setContact({ ...contact, [name]: value });
         setError('');
     };
 
-    // Guardar contacto (crear o actualizar)
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -92,7 +89,6 @@ function ContactForm() {
                         required
                     />
                 </div>
-
                 <div className="mb-3">
                     <label className="form-label">Last Name</label>
                     <input
@@ -103,7 +99,6 @@ function ContactForm() {
                         required
                     />
                 </div>
-
                 <div className="mb-3">
                     <label className="form-label">Email</label>
                     <input
@@ -115,7 +110,6 @@ function ContactForm() {
                         required
                     />
                 </div>
-
                 <div className="mb-3">
                     <label className="form-label">Position</label>
                     <select
@@ -133,7 +127,6 @@ function ContactForm() {
                         ))}
                     </select>
                 </div>
-
                 <button type="submit" className="btn btn-success" disabled={loading}>
                     {id ? 'Update' : 'Create'}
                 </button>

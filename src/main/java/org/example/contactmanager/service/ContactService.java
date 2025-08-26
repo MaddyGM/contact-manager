@@ -43,7 +43,6 @@ public class ContactService {
         return savedContact;
     }
 
-    //TODO: con la yuda de la ID del usuario?
     public Position getPositionById(Long id) {
         logger.info("Fetching position with ID {}", id);
         return positionRepository.findById(id)

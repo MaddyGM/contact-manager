@@ -1,4 +1,4 @@
-# Usamos imagen oficial de OpenJDK
+# Java image
 FROM openjdk:21-jdk-slim
 
 # Directorio de trabajo dentro del contenedor

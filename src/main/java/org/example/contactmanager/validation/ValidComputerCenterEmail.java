@@ -8,7 +8,6 @@ import java.lang.annotation.*;
 @Documented
 @Constraint(validatedBy = { ComputerCenterEmailValidator.class })
 @Target({ ElementType.FIELD, ElementType.PARAMETER})
-//TODO check
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ValidComputerCenterEmail {
     String message() default "Invalid domain email";
