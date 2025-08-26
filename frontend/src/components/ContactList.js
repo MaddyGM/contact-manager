@@ -12,12 +12,9 @@ function ContactList() {
         setLoading(true);
         setError(null);
         try {
-            console.log("Loading contacts from API...");
             const result = await getContacts();
             setContacts(result.data);
-            console.log(`Contacts loaded successfully: ${result.data.length} entries.`);
         } catch (err) {
-            console.error("Error loading contacts:", err);
             if (err.response && err.response.data && err.response.data.message) {
                 setError(err.response.data.message);
             } else {
@@ -37,12 +34,9 @@ function ContactList() {
         if (!confirmDelete) return;
 
         try {
-            console.log(`Delete contact with ID: ${id}...`);
             await deleteContact(id);
-            console.log(`Contact with ID ${id} deleted successfully.`);
             await loadContacts();
         } catch (err) {
-            console.error(`Error deleting contact with ID ${id}:`, err);
             if (err.response && err.response.data && err.response.data.message) {
                 setError(err.response.data.message);
             } else {

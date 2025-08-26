@@ -40,21 +40,17 @@ function ContactDetail() {
     if (!contact) return <div className="container mt-4">No contact data available.</div>;
 
     return (
-        <div className="container mt-4">
-            <div className="row justify-content-center">
-                <div className="col-12 col-md-8 col-lg-6">
-                    <h2>Contact details</h2>
-                    <div className="card">
-                        <div className="card-body">
-                            <p><strong>Name:</strong> {contact.firstName}</p>
-                            <p><strong>Lastname:</strong> {contact.lastName}</p>
-                            <p><strong>Email:</strong> {contact.email}</p>
-                            <p><strong>Position:</strong> {contact.position ? contact.position.name : ''}</p>
-                        </div>
-                    </div>
-                    <Link className="btn btn-secondary mt-3 w-100" to="/">Back to contacts page</Link>
+        <div className="container w-25 mt-4 d-flex flex-column justify-content-center">
+            <h2>Contact details</h2>
+            <div className="card">
+                <div className="card-body">
+                    <p><strong>Name:</strong> {contact.firstName}</p>
+                    <p><strong>Lastname:</strong> {contact.lastName}</p>
+                    <p><strong>Email:</strong> {contact.email}</p>
+                    <p><strong>Position:</strong> {contact.position ? contact.position.name : ''}</p>
                 </div>
             </div>
+            <Link className="btn btn-secondary mt-3" to="/">Back to contacts page</Link>
         </div>
     );
 }
