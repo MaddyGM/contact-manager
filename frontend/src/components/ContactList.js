@@ -61,9 +61,9 @@ function ContactList() {
                 {error && <div className="text-danger mb-3">{error}</div>}
 
                 {!loading && !error && (
-                    <div className="table-responsive">
-                        <table className="table table-striped table-hover">
-                            <thead className="table-light">
+                    <div className="table-container" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
+                        <table className="table table-striped table-hover w-100">
+                            <thead className="table-light sticky-top">
                             <tr>
                                 <th>Name</th>
                                 <th>Last Name</th>
@@ -94,7 +94,6 @@ function ContactList() {
                 )}
             </div>
         </div>
-
     );
 }
 
