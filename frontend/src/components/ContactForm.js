@@ -72,7 +72,7 @@ function ContactForm() {
     };
 
     return (
-        <div className="container mt-4 w-25">
+        <div className="container mt-4 w-100" style={{ maxWidth: '500px' }}>
             <h2>{id ? 'Editar Contacto' : 'Agregar Contacto'}</h2>
 
             {loading && <div className="mb-3">Loading...</div>}
@@ -113,7 +113,7 @@ function ContactForm() {
                 <div className="mb-3">
                     <label className="form-label">Position</label>
                     <select
-                        className="form-control"
+                        className="form-select"
                         name="positionId"
                         value={contact.positionId}
                         onChange={handleChange}
@@ -127,11 +127,12 @@ function ContactForm() {
                         ))}
                     </select>
                 </div>
-                <button type="submit" className="btn btn-success" disabled={loading}>
+                <button type="submit" className="btn btn-success w-100" disabled={loading}>
                     {id ? 'Update' : 'Create'}
                 </button>
             </form>
         </div>
+
     );
 }
 
