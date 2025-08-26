@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/contacts")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "https://contact-manager-1-ijwo.onrender.com")
 public class ContactController {
     private final ContactService service;
     private final Logger logger = LoggerFactory.getLogger(ContactController.class);
